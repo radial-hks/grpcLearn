@@ -1,0 +1,36 @@
+syntax="proto3";
+package services;
+import "google/protobuf/timestamp.proto";
+import "validate.proto";
+
+message ProdModel{
+  int32 id =1;
+  string prod_name = 2;
+  int64 prod_price = 3;
+}
+
+message OrderMain{
+  int32 order =1;
+  string order_no = 2;
+  int32 user_id = 3;
+  float order_money = 4[(validate.rules).float.gte = 1];
+  google.protobuf.Timestamp order_time = 5;
+  repeated OrderDetail order_details = 6;
+}
+
+
+message OrderDetail {
+  int32 datail_id =1;
+  string order_no = 2;
+  int32 prod_id = 3;
+  float prod_price = 4;
+  int32 prod_num = 5;
+}
+
+
+message UserInfo{
+  int32 user_id = 1;
+  int32 user_score = 2;
+}
+
+

@@ -1,0 +1,24 @@
+syntax="proto3";
+package services;
+//import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+import "Models.proto";
+
+
+message OrderRequest {
+  OrderMain order_main = 1;
+}
+
+message  OrderResponse{
+   string status = 1;
+   string message = 2;
+}
+
+service OrderService{
+  rpc NewOrder(OrderRequest) returns (OrderResponse){
+    option (google.api.http) = {
+      post : "/v1/order";
+      body: "order_main";
+    };
+  };
+}

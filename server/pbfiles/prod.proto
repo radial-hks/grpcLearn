@@ -1,0 +1,57 @@
+syntax="proto3";
+package services;
+import "google/api/annotations.proto";
+import "Models.proto";
+
+
+enum ProdAreas{
+  A=0;
+  B=1;
+  C=2;
+}
+
+//message ProdModel{
+//  int32 id =1;
+//  string prod_name = 2;
+//  int64 prod_price = 3;
+//}
+
+message ProdRequest {
+  int32 prod_id = 1; //商品ID
+  ProdAreas prod_area = 2;
+}
+
+message ProdResponse {
+  int32 prod_stock = 1; //商品库存
+}
+
+message QuerySize{
+  int64 size=1; // order
+}
+
+message ProdResponseList {
+  repeated ProdResponse prodres = 1;
+}
+
+service ProductService {
+  rpc  GetProductStock (ProdRequest) returns (ProdResponse){
+    option (google.api.http) = {
+      get : "/v1/prod/{prod_id}";
+    };
+  };
+  rpc GetProdStocks(QuerySize) returns (ProdResponseList) {
+    option (google.api.http) = {
+      get : "/v1/info/{size}";
+    };
+  };
+  rpc GetProductInfo (ProdRequest) returns (ProdModel){};
+}
+
+// protoc -I ./server/pbfiles/  ./server/pbfiles/prod.proto  --go_out=plugins=grpc:./server/services
+// protoc -I ./server/pbfiles   ./server/pbfiles/prod.proto  --go_out=plugins=grpc:./server/services
+
+// protoc --go_out=plugins=grpc:../services prod.proto
+// protoc --grpc-gateway_out=logtostderr=true:../services prod.proto
+
+
+// protoc -I ./server/pbfiles  prod.proto  --go_out=plugins=grpc:./server/services
